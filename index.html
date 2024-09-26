@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+        }
+        #left-pane {
+            flex: 1;
+            padding: 20px;
+            background-color: #f0f0f0;
+            overflow-y: auto;
+        }
+        #right-pane {
+            flex: 1;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+        h1 {
+            margin-top: 0;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #ffffff;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .delete-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .delete-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div id="left-pane">
+        <h1>TASK LIST</h1>
+        <ul id="task-list"></ul>
+    </div>
+    <div id="right-pane">
+        <h1>I need to...</h1>
+        <form id="task-form">
+            <input type="text" id="task-input" placeholder="Enter a new task" required>
+            <button type="submit">Add Task</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const taskForm = document.getElementById('task-form');
+            const taskInput = document.getElementById('task-input');
+            const taskList = document.getElementById('task-list');
+
+            taskForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const taskText = taskInput.value.trim();
+                if (taskText) {
+                    addTask(taskText);
+                    taskInput.value = '';
+                }
+            });
+
+            function addTask(text) {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${text}</span>
+                    <div>
+                        <input type="checkbox" onchange="toggleComplete(this)">
+                        <button class="delete-btn" onclick="deleteTask(this)">×</button>
+                    </div>
+                `;
+                taskList.appendChild(li);
+            }
+
+            window.toggleComplete = function(checkbox) {
+                const taskText = checkbox.parentElement.previousElementSibling;
+                if (checkbox.checked) {
+                    taskText.style.textDecoration = 'line-through';
+                } else {
+                    taskText.style.textDecoration = 'none';
+                }
+            }
+
+            window.deleteTask = function(button) {
+                const li = button.closest('li');
+                li.remove();
+            }
+        });
+    </script>
+</body>
+</html>
